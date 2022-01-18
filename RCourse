@@ -1,0 +1,108 @@
+Data <- read.table("https://s3.amazonaws.com/assets.datacamp.com/blog_assets/test.txt", 
+                 header = FALSE)
+#Проверка содержания датасета
+head(Data)
+#Подключение пакета
+library(tsDyn)
+#Задание временных рядов
+t <- ts(Data$V5)
+p <- ts(Data$V11)
+#Построение графиков
+plot(t)
+plot(p)
+#Проверка линейности рядов
+llar(t, m = 3)
+llar(p, m = 3)
+#Создание моделей и построение их графиков
+availableModels()
+
+aar_t <- aar(t, m = 3)
+plot(aar_t)
+aar_p <- aar(p, m = 3)
+plot(aar_p)
+
+star_t <- star(t)
+plot(star_t)
+star_p <- star(p)
+plot(star_p)
+
+linear_t <- linear(t, m = 3)
+plot(linear_t)
+linear_p <- linear(p, m = 3)
+plot(linear_p)
+
+nnetTs_t <- nnetTs(t, m = 2, size = 3)
+plot(nnetTs_t)
+nnetTs_p <- nnetTs(p, m = 2, size = 3)
+plot(nnetTs_p)
+
+setar_t <- setar(t, m=2, thDelay=1)
+plot(setar_t)
+setar_p <- setar(p, m=2, thDelay=1)
+plot(setar_p)
+
+lineVar_t <- lineVar(t, lag=2, model="VECM", estim="ML")
+plot(lineVar_t)
+
+TVAR_t <- TVAR(t, lag=2, nthresh=2, thDelay=1, trim=0.1, mTh=1, plot=TRUE)
+
+TVECM_t <- TVECM(t, nthresh=2,lag=1, ngridBeta=20, ngridTh=30, plot=TRUE,trim=0.05, common="All")
+
+#Проверка содержания датасета
+head(Data)
+#Подключение пакетов
+library(nnfor)
+library(neuralnet)
+#Задание временных рядов
+t <- ts(Data$V5)
+p <- ts(Data$V11)
+#Создание нейронных сетей MLP
+fit1 <- mlp(t)
+fit2 <- mlp(p)
+#Вывод информации о сетях
+print(fit1)
+print(fit2)
+#Построение графиков
+plot(fit1)
+plot(fit2)
+#Создание прогнозов
+frc1 <- forecast(fit1, h=100)
+frc2 <- forecast(fit2, h=100)
+#Вывод прогноза
+print(frc1)
+print(frc2)
+#Построение графиков
+plot(frc1)
+plot(frc2)
+#Создание нейронных сетей ELM
+fit11 <- elm(t)
+fit21 <- elm(p)
+#Вывод информации о сетях
+print(fit11)
+print(fit21)
+#Построение графиков
+plot(fit11)
+plot(fit21)
+#Создание прогнозов
+frc11 <- forecast(fit11, h=100)
+frc21 <- forecast(fit21, h=100)
+#Вывод прогноза
+print(frc11)
+print(frc21)
+#Построение графиков
+plot(frc11)
+plot(frc21)
+
+#Проверка содержания датасета
+head(Data)
+#Подключение пакета
+library (NlinTS)
+#Задание временных рядов
+t <- ts(Data$V5)
+p <- ts(Data$V11)
+#Проведение теста причинности
+model = causality.test (t, p, 2)
+model$summary ()
+#Проведение теста нелинейного причинности с использованием MLP нейросетей
+model1 = nlin_causality.test (t, p, 2, c(2), c(4), 50, 0.01, "sgd", 30, TRUE, 5)
+model1$summary ()
